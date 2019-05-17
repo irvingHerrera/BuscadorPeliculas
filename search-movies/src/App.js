@@ -1,16 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Title } from './components/Title';
+import { SearchForm } from './components/SearchForm'
 
 import './App.css';
 import 'bulma/css/bulma.css';
 
 
-function App() {
+class App extends Component {
+
+  state = { results: [] }
+
+  _handleResults = (results) => {
+    this.setState({ results })
+  }
+  
+  _renderResult() {
+        const { results } = this.state
+        return results.map(movie => {
+          return <p key={ movie.imdbID }>{ movie.Title }</p>
+        })
+  }
+
+  render() {
     return ( 
-        <div className = "App">
-         <Title>Serarch Movies </Title> 
-        </div>
-    );
+      <div className = "App">
+       <Title>Serarch Movies </Title> 
+       <div className="SearchForm-wrapper">
+        <SearchForm onResults={ this._handleResults }></SearchForm>
+       </div>
+        { this.state.results.length === 0
+          ? <p>Sin resultados</p>
+          : this._renderResult() }
+      </div>
+  );
+
+  }
 }
 
 export default App;
